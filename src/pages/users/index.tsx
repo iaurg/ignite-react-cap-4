@@ -2,6 +2,7 @@ import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th,
 import { Header } from "components/Header";
 import { Pagination } from 'components/Pagination';
 import { Sidebar } from 'components/Sidebar';
+import Link from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
 
@@ -21,9 +22,11 @@ export default function UserList() {
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" align="center" justify="space-between">
             <Heading fontWeight="normal" size="lg">Usuários</Heading>
-            <Button as="a" leftIcon={<Icon as={RiAddLine} fontSize="20"/>} colorScheme="pink" size="sm" fontSize="md" cursor="pointer">
-              Criar usuário
-            </Button>
+            <Link href="/users/create" passHref>
+              <Button as="a" leftIcon={<Icon as={RiAddLine} fontSize="20"/>} colorScheme="pink" size="sm" fontSize="md" cursor="pointer">
+                Criar usuário
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
