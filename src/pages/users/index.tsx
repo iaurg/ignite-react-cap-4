@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import Link from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
+import { api } from 'services/api'
 import { Header } from "components/Header";
 import { Pagination } from 'components/Pagination';
 import { Sidebar } from 'components/Sidebar';
@@ -10,8 +11,8 @@ import { Sidebar } from 'components/Sidebar';
 
 export default function UserList() {
   const { data, isLoading, isFetching, isError } = useQuery('users', async () => {
-    const response = await fetch('/api/users')
-    const data = await response.json()
+    const { data } = await api.get('users')
+
     const users = data.users.map(user => {
       return {
         name: user.name,
