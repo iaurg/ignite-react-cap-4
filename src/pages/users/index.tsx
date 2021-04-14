@@ -3,6 +3,7 @@ import { Header } from "components/Header";
 import { Pagination } from 'components/Pagination';
 import { Sidebar } from 'components/Sidebar';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
 
@@ -12,6 +13,10 @@ export default function UserList() {
     base: false,
     lg: true
   })
+
+  useEffect(() => {
+    fetch('/api/users').then(response => response.json()).then(d => console.log(d))
+  }, [])
 
   return(
     <Box>
