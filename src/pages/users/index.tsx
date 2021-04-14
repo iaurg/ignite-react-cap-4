@@ -1,7 +1,6 @@
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from '@chakra-ui/react'
 import { useQuery } from 'react-query';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
 import { Header } from "components/Header";
@@ -10,7 +9,7 @@ import { Sidebar } from 'components/Sidebar';
 
 
 export default function UserList() {
-  const { data, isLoading, isError } = useQuery('users', async () => {
+  const { data, isLoading, isFetching, isError } = useQuery('users', async () => {
     const response = await fetch('/api/users')
     const data = await response.json()
     const users = data.users.map(user => {
@@ -26,6 +25,8 @@ export default function UserList() {
     })
 
     return users
+  }, {
+    staleTime: 1000 * 5, // 5 seconds
   })
 
   const isWideVersion = useBreakpointValue({
@@ -41,7 +42,10 @@ export default function UserList() {
         <Sidebar />
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" align="center" justify="space-between">
-            <Heading fontWeight="normal" size="lg">Usuários</Heading>
+            <Heading fontWeight="normal" size="lg">
+              Usuários
+              { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" />}
+            </Heading>
             <Link href="/users/create" passHref>
               <Button as="a" leftIcon={<Icon as={RiAddLine} fontSize="20"/>} colorScheme="pink" size="sm" fontSize="md" cursor="pointer">
                 Criar usuário
