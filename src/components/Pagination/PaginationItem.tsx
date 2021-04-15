@@ -34,7 +34,7 @@ export function PaginationItem({ isCurrent, number }: PaginationProps){
         bgColor: 'gray.500'
       }}
     >
-      2
+      {number}
     </Button>
   )
 }
