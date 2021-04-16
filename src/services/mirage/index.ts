@@ -2,6 +2,7 @@ import { createServer, Factory, Model, Response } from 'miragejs'
 import faker from 'faker'
 
 type User = {
+  id: string
   email: string
   name: string
   created_at: string
@@ -36,7 +37,8 @@ export function makeServer() {
         const pageStart = (Number(page) - 1) * Number(per_page)
         const pageEnd = pageStart + Number(per_page)
 
-        const users = this.serialize(schema.all('user')).users.slice(pageStart, pageEnd)
+        const users = this.serialize(schema.all('user'))
+        .users.slice(pageStart, pageEnd)
 
         return new Response(
           200,
@@ -44,6 +46,7 @@ export function makeServer() {
           { users }
         )
       })
+      this.get('/users/:name')
       this.post('/users')
       this.namespace = '' // Reinicia namespace para não da conflito com /api do next.js
       this.passthrough() // Após executar tudo do mirage ele continua as rotas normais do app

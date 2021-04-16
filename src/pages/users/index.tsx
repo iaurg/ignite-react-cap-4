@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, Link as ChakraLink } from '@chakra-ui/react'
 import Link from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { useState } from 'react';
@@ -7,6 +7,8 @@ import { Header } from "components/Header";
 import { Pagination } from 'components/Pagination';
 import { Sidebar } from 'components/Sidebar';
 import { useUsers } from 'services/hooks/useUsers';
+import { queryClient } from 'services/queryClient';
+import { api } from 'services/api';
 
 
 export default function UserList() {
@@ -17,6 +19,16 @@ export default function UserList() {
     base: false,
     lg: true
   })
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`)
+
+      return response.data
+    }, {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+    })
+  }
 
   return(
     <Box>
@@ -67,9 +79,11 @@ export default function UserList() {
                         <Td px={["4","4","6"]}>
                           <Checkbox colorScheme="pink"/>
                         </Td>
-                        <Td>
+                        <Td>                          
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <ChakraLink color="purple.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </ChakraLink>
                             <Text fontSize="sm" color="gray.300">{user.email}</Text>
                           </Box>
                         </Td>
